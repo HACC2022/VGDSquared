@@ -129,5 +129,11 @@ button {
 }
 #finishHeader, #finishDescription, #finishScore, #correctQuestions, #totalQuestions {
     display: none;
-    position: absolute;
+    /* position: absolute; */
+}
+
+#finish {
+    display: none;
+
+
 }

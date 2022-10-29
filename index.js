@@ -1,4 +1,4 @@
-
+const favicon = require('serve-favicon');
 const express = require('express');
 const path = require('path');
 
@@ -25,7 +25,9 @@ async function initDatabase() {
     await client.connect();     
     console.log("connected!");
     const db = client.db('BroadBand');    
-    const testResultsCollection = db.collection('TestResults');
+    const testResultsCollection = db.collection('QuizResults');
+
+    //testResultsCollection.insertOne({"correctIncorrect":[false,false,false,false],"answerNames":["False","Online education","International Supplier Power","Costs money"],"score":0})
 
     testResultsCollection.find().toArray().then(
         results => {
@@ -34,7 +36,9 @@ async function initDatabase() {
     ).catch(error => console.error(error));
     
     app.post('/results', (req, res) => {
-        console.log(req.body)
+        //console.log(`Sent to database: ${req.body}`)
+        console.log(req)
+        //results of send
         testResultsCollection.insertOne(req.body)   
         .then(result => {
             console.log(result)
@@ -55,6 +59,9 @@ app.use('/css', express.static(__dirname + "/css"));
 app.use('/js', express.static(__dirname + "/js"));
 
 app.use('/answers', express.static(__dirname + "/answers"));
+//app.use('/favicon.ico', express.static(__dirname + "/favicon.ico"));
+app.use(favicon(__dirname + '/favicon.ico'));
+
 
 // Serves the index.html file
 app.get('/', function(req, res) {
@@ -68,22 +75,29 @@ app.get('/form.html', function(req, res) {
 app.get('/quiz.html', function(req, res) {
     res.sendFile(path.join(__dirname, '/quiz.html'));
 });
+app.get('/quiz-finished.html', function(req, res) {
+    res.sendFile(path.join(__dirname, '/quiz-finished.html'));
+});
 
 app.get('/lesson/how-the-internet-works.html', function(req, res) {
     res.sendFile(path.join(__dirname, '/lesson/how-the-internet-works.html'));
 });
-
-app.get('/page-not-found.html', function(req, res) {
-    res.sendFile(path.join(__dirname, '/page-not-found.html'));
+app.get('/chapter-1/lesson-1/page1.html', function(req, res) {
+    res.sendFile(path.join(__dirname, '/chapter-1/lesson-1/page1.html'));
+});
+app.get('/chapter-1/lesson-1/page2.html', function(req, res) {
+    res.sendFile(path.join(__dirname, '/chapter-1/lesson-1/page2.html'));
+});
+app.get('/chapter-1/lesson-1/page3.html', function(req, res) {
+    res.sendFile(path.join(__dirname, '/chapter-1/lesson-1/page3.html'));
+});
+app.get('/chapter-1/lesson-1/page4.html', function(req, res) {
+    res.sendFile(path.join(__dirname, '/chapter-1/lesson-1/page4.html'));
 });
 
-app.get('/Lesson1Page1.html', function(req, res) {
-    res.sendFile(path.join(__dirname, '/Lesson1Page1.html'));
-});
 
-app.get('/Lesson1Page3.html', function(req, res) {
-    res.sendFile(path.join(__dirname, '/Lesson1Page3.html'));
-});
+
+
 
 app.listen(port);
 console.log('Server started at http://localhost:' + port);

@@ -64,6 +64,8 @@ const finishDescription = document.getElementById('finishDescription')
 const totalQuestions = document.getElementById('totalQuestions')
 const correctQuestions = document.getElementById('correctQuestions')
 const finishScore = document.getElementById('finishScore')
+const finishDiv = document.getElementById('finishDiv')
+const quizDiv = document.getElementById('quiz')
 
 
 var lessonNumber = urlParams.get("lesson")
@@ -126,7 +128,6 @@ function registerAnswerChoiceButton(number) {
 }
 
 async function sendResults(correctIncorrect, names, score) {
-
     let json = {
         "correctIncorrect": correctIncorrect,
         "answerNames": names,
@@ -155,7 +156,7 @@ async function sendResults(correctIncorrect, names, score) {
 
     // Converting JSON data to string
     var data = JSON.stringify(json);
-    console.log(data)
+    console.log(`Post sent data: ${data}`)
     // Sending data with the request
     xhr.send(data);
 }
@@ -210,19 +211,23 @@ function selectAnswer(event) {
                 correctQuestions += 1
         })
         let score = correctQuestions / questions
+        /*
+        finishDiv.style.display = 'block'
+        quizDiv.style.display = 'none'
 
         finishHeader.style.display = 'block'
         finishDescription.style.display = 'block'
-        finishScore.textContent = score
-        
-
-
-
+        finishScore.textContent = score.toString()
+        */
         console.log(selectedAnswerBools, selectedAnswerNames, score)
 
         sendResults(selectedAnswerBools, selectedAnswerNames, score)
         
         //TODO find better way to exit
+        console.log("AAAAAAAAA")
+        window.location.assign(document.location.origin + "/quiz-finished.html")
+        console.log("AAAAAAAAA")
+
         return
     } 
     else
